@@ -1,18 +1,18 @@
 {
   "tasks": {
+    "prepare": {
+      "outputs": [".nuxt/**"]
+    },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".nuxt/**", "dist/**"]
+      "dependsOn": ["prepare", "^build"],
+      "outputs": [".output/**", "dist/**"]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "lint": {
-      "outputs": []
-    },
-    "test": {
-      "outputs": ["coverage/**"]
+      "dependsOn": ["^lint"]
     }
   }
 }

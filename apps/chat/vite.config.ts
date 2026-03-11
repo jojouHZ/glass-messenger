@@ -15,6 +15,7 @@ export default defineConfig({
         vue: { singleton: true, requiredVersion: '^3.5.0' },
         pinia: { singleton: true, requiredVersion: '^3.0.0' },
       },
+      dts: false,
     }),
   ],
   server: {
