@@ -15,3 +15,13 @@ node_modules
 
 #!.yarn/cache
 .pnp.*
+
+node_modules
+.nuxt
+.output
+dist
+.turbo
+.yarn/cache
+.yarn/unplugged
+.env
+*.local

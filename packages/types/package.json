@@ -1,0 +1,9 @@
+{
+  "name": "@glass/types",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts"
+}

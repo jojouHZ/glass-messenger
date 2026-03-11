@@ -1,0 +1,13 @@
+{
+  "name": "@glass/ui",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles": "./src/styles/index.scss"
+  },
+  "main": "./src/index.ts",
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  }
+}

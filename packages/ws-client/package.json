@@ -1,0 +1,16 @@
+{
+  "name": "@glass/ws-client",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts",
+  "peerDependencies": {
+    "pinia": "^3.0.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "dexie": "^4.0.0"
+  }
+}

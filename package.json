@@ -1,4 +1,31 @@
 {
   "name": "glass-messenger",
-  "packageManager": "yarn@4.13.0"
+  "private": true,
+  "packageManager": "yarn@4.13.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "turbo run test",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^7.7.0",
+    "@commitlint/cli": "^20.4.3",
+    "@commitlint/config-conventional": "^20.4.3",
+    "eslint": "^10.0.3",
+    "eslint-plugin-format": "^2.0.1",
+    "eslint-plugin-import-x": "^4.16.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.3",
+    "prettier": "^3.8.1",
+    "turbo": "latest",
+    "typescript": "^5.7.0"
+  }
 }
