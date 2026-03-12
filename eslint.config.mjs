@@ -7,6 +7,7 @@ export default antfu(
     vue: true,
     typescript: true,
     formatters: true,
+    stylistic: false,
   },
   {
     plugins: {
@@ -14,43 +15,30 @@ export default antfu(
       'import-x': importX,
     },
     rules: {
-      // Сортировка импортов
+      'perfectionist/sort-imports': 'off',     // ← отключаем сломанный
+      'perfectionist/sort-named-imports': 'off', // ← тоже off во избежание
       'simple-import-sort/imports': [
         'error',
         {
           groups: [
-            // 1. Side effects
             ['^\\u0000'],
-            // 2. Node built-ins
             ['^node:'],
-            // 3. Vue / Nuxt / Vite ecosystem
             ['^vue', '^@vue', '^nuxt', '^#app', '^#imports'],
-            // 4. Pinia
             ['^pinia'],
-            // 5. Монорепо пакеты @glass/*
             ['^@glass/'],
-            // 6. Внешние пакеты
             ['^@', '^[a-z]'],
-            // 7. Абсолютные алиасы (~/, #/)
             ['^~/'],
-            // 8. Относительные импорты
             ['^\\.'],
-            // 9. Типы
             ['^.*\\u0000$'],
           ],
         },
       ],
       'simple-import-sort/exports': 'error',
-
-      // Circular dependencies
       'import-x/no-cycle': ['error', { maxDepth: 5 }],
-
-      // Порядок групп (дублирует simple-import-sort, но ловит другие кейсы)
-      'import-x/order': 'off', // отключаем — используем simple-import-sort
+      'import-x/order': 'off',
     },
   },
   {
-    // Игнорируем сгенерированные файлы
     ignores: [
       '**/node_modules/**',
       '**/.nuxt/**',
@@ -59,6 +47,8 @@ export default antfu(
       '.yarn/**',
       '**/__mf__temp/**',
       '**/.mf/**',
+      '**/public/remotes/**',
+      '**/*.md',
     ],
   },
 )

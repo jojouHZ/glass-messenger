@@ -7,6 +7,15 @@
       "dependsOn": ["prepare", "^build"],
       "outputs": [".output/**", "dist/**"]
     },
+    "build:copy": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "outputs": []
+    },
+    "@glass/host#build": {
+      "dependsOn": ["@glass/friends#build:copy", "@glass/chat#build:copy", "prepare"],
+      "outputs": [".output/**"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

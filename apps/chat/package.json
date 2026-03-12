@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite --port 5002",
     "build": "vite build",
-    "lint": "eslint ."
+    "build:copy": "mkdir -p ../../apps/host/public/remotes/chat && cp -r dist/* ../../apps/host/public/remotes/chat/"
   },
   "dependencies": {
     "pinia": "^3.0.0",

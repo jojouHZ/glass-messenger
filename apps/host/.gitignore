@@ -22,3 +22,6 @@ logs
 .env
 .env.*
 !.env.example
+
+# MF remotes build artifacts
+apps/host/public/remotes/

@@ -1,21 +1,16 @@
-import { useAuthStore } from '~/stores/auth'
-
-const publicPaths = ['/login']
+import { useAuthStore } from '@/stores/auth'
 
 export default defineNuxtRouteMiddleware((to) => {
-  // На сервере пока ничего не делаем
+  // Pinia + localStorage недоступны на сервере
   if (import.meta.server) return
 
   const auth = useAuthStore()
 
-  if (publicPaths.includes(to.path)) {
-    if (auth.isAuthenticated) {
-      return navigateTo('/')
-    }
-    return
+  if (!auth.user && to.path !== '/login') {
+    return navigateTo('/login')
   }
 
-  if (!auth.isAuthenticated) {
-    return navigateTo('/login')
+  if (auth.user && to.path === '/login') {
+    return navigateTo('/')
   }
 })

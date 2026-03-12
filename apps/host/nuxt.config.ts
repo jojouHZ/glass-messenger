@@ -1,6 +1,9 @@
 import { federation } from '@module-federation/vite'
 
+const isProd = import.meta.env.PROD
+
 export default defineNuxtConfig({
+  compatibilityDate: '2026-03-11',
   devtools: { enabled: true },
 
   modules: ['@pinia/nuxt', 'nuxt-security'],
@@ -24,6 +27,12 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    ssr: {
+      noExternal: ['pinia'],
+    },
+    optimizeDeps: {
+      include: ['pinia'],
+    },
     plugins: [
       federation({
         name: 'host',
@@ -31,12 +40,14 @@ export default defineNuxtConfig({
           friends: {
             type: 'module',
             name: 'friends',
-            entry: 'http://localhost:5001/remoteEntry.js',
+            entry: isProd
+              ? '/remotes/friends/remoteEntry.js'
+              : 'http://localhost:5001/remoteEntry.js',
           },
           chat: {
             type: 'module',
             name: 'chat',
-            entry: 'http://localhost:5002/remoteEntry.js',
+            entry: isProd ? '/remotes/chat/remoteEntry.js' : 'http://localhost:5002/remoteEntry.js',
           },
         },
         shared: {
@@ -50,10 +61,10 @@ export default defineNuxtConfig({
   security: {
     headers: {
       contentSecurityPolicy: {
-        'default-src': ['self'],
-        'connect-src': ['self', 'wss:'],
-        'script-src': ['self', 'unsafe-inline'],
-        'style-src': ['self', 'unsafe-inline'],
+        'default-src': ["'self'"],
+        'connect-src': ["'self'", 'wss:'],
+        'script-src': ["'self'", "'unsafe-inline'"],
+        'style-src': ["'self'", "'unsafe-inline'"],
       },
     },
   },

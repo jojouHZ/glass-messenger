@@ -1,12 +1,14 @@
-// User
+// ─── User ────────────────────────────────────────────────────────────────────
+
 export interface User {
   id: string
   username: string
-  publicKey: string
+  publicKey: string // ECDH P-256, base64 SPKI
   createdAt: number
 }
 
-// Room
+// ─── Room ────────────────────────────────────────────────────────────────────
+
 export interface Room {
   id: string
   participantIds: string[]
@@ -14,7 +16,8 @@ export interface Room {
   lastMessageAt?: number
 }
 
-// Message
+// ─── Message ─────────────────────────────────────────────────────────────────
+
 export type MessageStatus = 'pending' | 'delivered' | 'read'
 
 export interface Message {
@@ -27,7 +30,8 @@ export interface Message {
   createdAt: number
 }
 
-// Invite
+// ─── Invite ──────────────────────────────────────────────────────────────────
+
 export interface Invite {
   id: string
   code: string // 8-char TOTP
@@ -35,17 +39,49 @@ export interface Invite {
   expiresAt: number
 }
 
-// WebSocket events
-export type WsEventType
-  = | 'join'
-    | 'leave'
-    | 'message'
-    | 'ack'
-    | 'typing'
-    | 'key-exchange'
+// ─── WS Payloads ─────────────────────────────────────────────────────────────
 
-export interface WsEvent<T = unknown> {
-  type: WsEventType
+export interface JoinPayload {
+  userId: string
   roomId: string
-  payload: T
 }
+
+export interface LeavePayload {
+  userId: string
+  roomId: string
+}
+
+export interface MessagePayload {
+  messageId: string
+  senderId: string
+  storedPayload: string // AES-GCM, base64
+  iv: string // base64
+}
+
+export interface AckPayload {
+  messageId: string
+  status: MessageStatus
+}
+
+export interface TypingPayload {
+  userId: string
+  isTyping: boolean
+}
+
+export interface KeyExchangePayload {
+  fromUserId: string
+  toUserId: string
+  publicKey: string // base64 SPKI
+}
+
+// ─── WS Events (discriminated union) ─────────────────────────────────────────
+
+export type WsEvent =
+  | { type: 'join'; roomId: string; payload: JoinPayload }
+  | { type: 'leave'; roomId: string; payload: LeavePayload }
+  | { type: 'message'; roomId: string; payload: MessagePayload }
+  | { type: 'ack'; roomId: string; payload: AckPayload }
+  | { type: 'typing'; roomId: string; payload: TypingPayload }
+  | { type: 'key-exchange'; roomId: string; payload: KeyExchangePayload }
+
+export type WsEventType = WsEvent['type']
