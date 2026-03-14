@@ -12,7 +12,7 @@
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "@module-federation/vite": "^1.0.0",
+    "@module-federation/vite": "^1.12.3",
     "@vitejs/plugin-vue": "^5.0.0",
     "sass": "^1.85.0",
     "typescript": "^5.7.0",

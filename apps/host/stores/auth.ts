@@ -23,7 +23,6 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     hydrateFromStorage() {
       if (!import.meta.client) return
-
       try {
         const raw = localStorage.getItem(STORAGE_KEY)
         if (raw) {

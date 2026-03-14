@@ -1071,7 +1071,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@glass/chat@workspace:apps/chat"
   dependencies:
-    "@module-federation/vite": "npm:^1.0.0"
+    "@module-federation/vite": "npm:^1.12.3"
     "@vitejs/plugin-vue": "npm:^5.0.0"
     pinia: "npm:^3.0.0"
     sass: "npm:^1.85.0"
@@ -1086,7 +1086,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@glass/friends@workspace:apps/friends"
   dependencies:
-    "@module-federation/vite": "npm:^1.0.0"
+    "@module-federation/vite": "npm:^1.12.3"
     "@vitejs/plugin-vue": "npm:^5.0.0"
     pinia: "npm:^3.0.0"
     sass: "npm:^1.85.0"
@@ -1376,7 +1376,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@module-federation/vite@npm:^1.0.0, @module-federation/vite@npm:^1.12.3":
+"@module-federation/vite@npm:^1.12.3":
   version: 1.12.3
   resolution: "@module-federation/vite@npm:1.12.3"
   dependencies:

@@ -1,3 +1,6 @@
+
+declare module 'friends/FriendsList'
+declare module 'chat/ChatWindow'
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
 
