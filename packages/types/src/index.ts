@@ -85,3 +85,15 @@ export type WsEvent =
   | { type: 'key-exchange'; roomId: string; payload: KeyExchangePayload }
 
 export type WsEventType = WsEvent['type']
+
+// MF Event Bus — shared constants & types
+export const GLASS_EVENTS = {
+  CHAT_OPEN: 'glass:chat-open',
+} as const
+
+export interface GlassChatOpenDetail {
+  roomId: string
+}
+
+// Helper: typed wrapper to avoid casting at call sites
+export type GlassChatOpenEvent = CustomEvent<GlassChatOpenDetail>

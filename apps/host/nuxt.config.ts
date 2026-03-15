@@ -25,9 +25,14 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    plugins: [
-      
-    ],
+    ssr: {
+      noExternal: ['pinia'],
+    },
+    build: {
+      rollupOptions: {
+        external: ['friends/FriendsList', 'chat/ChatWindow'],
+      },
+    },
   },
 
   security: {

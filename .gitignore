@@ -25,3 +25,6 @@ dist
 .yarn/unplugged
 .env
 *.local
+
+# MF remotes build artifacts (copied from apps/*/dist during build)
+apps/host/public/remotes/
