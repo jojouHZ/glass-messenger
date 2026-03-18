@@ -1,6 +1,8 @@
+import { federation } from '@module-federation/vite'
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-03-11',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   ssr: false,
 
@@ -11,6 +13,12 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
     typeCheck: false,
+  },
+
+  runtimeConfig: {
+    public: {
+      wsUrl: import.meta.env.NUXT_PUBLIC_WS_URL || '',
+    },
   },
 
   nitro: {
@@ -27,20 +35,46 @@ export default defineNuxtConfig({
   vite: {
     ssr: {
       noExternal: ['pinia'],
+      external: ['@module-federation/vite'],
     },
-    build: {
-      rollupOptions: {
-        external: ['friends/FriendsList', 'chat/ChatWindow'],
-      },
+    optimizeDeps: {
+      include: ['pinia'],
     },
+    plugins: [
+      federation({
+        name: 'host',
+        remotes: {
+          friends: {
+            type: 'module',
+            name: 'friends',
+            entry: import.meta.env.PROD
+              ? 'remotes/friends/remoteEntry.js'
+              : 'http://localhost:5001/remoteEntry.js',
+          },
+          chat: {
+            type: 'module',
+            name: 'chat',
+            entry: import.meta.env.PROD
+              ? 'remotes/chat/remoteEntry.js'
+              : 'http://localhost:5002/remoteEntry.js',
+          },
+        },
+        //shared: { vue: { singleton: true },  pinia: { singleton: true },},
+      }),
+    ],
   },
 
   security: {
     headers: {
       contentSecurityPolicy: {
-        'default-src': ["'self'"],
-        'connect-src': ["'self'", 'wss:'],
-        'script-src': ["'self'", "'unsafe-inline'"],
+        'default-src': ["'self'", 'http://localhost:5001', 'http://localhost:5002'],
+        'connect-src': ["'self'", 'ws:', 'wss:', 'http://127.0.0.1:16322'],
+        'script-src': [
+          "'self'",
+          "'unsafe-inline'",
+          'http://localhost:5001',
+          'http://localhost:5002',
+        ],
         'style-src': ["'self'", "'unsafe-inline'"],
       },
     },

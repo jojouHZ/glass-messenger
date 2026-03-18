@@ -11,10 +11,7 @@ export default defineConfig({
       exposes: {
         './FriendsList': './src/components/FriendsList.vue',
       },
-      shared: {
-        vue: { singleton: true, requiredVersion: '^3.5.0' },
-        pinia: { singleton: true, requiredVersion: '^3.0.0' },
-      },
+      //shared: { vue: { singleton: true },  pinia: { singleton: true },},
       dts: false,
     }),
   ],

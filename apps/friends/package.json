@@ -8,8 +8,8 @@
     "build:copy": "mkdir -p ../../apps/host/public/remotes/friends && cp -r dist/* ../../apps/host/public/remotes/friends/"
   },
   "dependencies": {
-    "pinia": "^3.0.0",
-    "vue": "^3.5.0"
+    "vue": "^3.5.30",
+    "pinia": "^3.0.4"
   },
   "devDependencies": {
     "@module-federation/vite": "^1.12.3",

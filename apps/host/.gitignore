@@ -25,3 +25,7 @@ logs
 
 # MF remotes build artifacts
 apps/host/public/remotes/
+
+# Module Federation temp
+.__mf__temp/
+**/.__mf__temp/

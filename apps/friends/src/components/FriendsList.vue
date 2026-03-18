@@ -1,40 +1,98 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import { GLASS_EVENTS } from '@glass/types'
 
 import type { GlassChatOpenDetail } from '@glass/types'
 
-interface Friend {
+interface FriendItem {
   id: string
-  name: string
+  displayName: string
+  // extend later with lastMessage, avatar, etc.
 }
 
-const friends: Friend[] = [
-  { id: 'mock-room-1', name: 'Alice' },
-  { id: 'mock-room-2', name: 'Bob' },
-]
+const props = defineProps<{
+  friends?: FriendItem[] // сделать опциональным
+}>()
 
-const openChat = (roomId: string): void => {
-  window.dispatchEvent(
-    new CustomEvent<GlassChatOpenDetail>(GLASS_EVENTS.CHAT_OPEN, {
-      bubbles: false,
-      detail: { roomId },
-    }),
-  )
+const normalizedFriends = computed<FriendItem[]>(() => {
+  // временный мок, пока нет реальных данных
+  if (props.friends && props.friends.length > 0) return props.friends
+
+  return [
+    { id: '1', displayName: 'Alice' },
+    { id: '2', displayName: 'Bob' },
+  ]
+})
+
+/**
+ * Emit chat-open event into global window scope.
+ * This is the only place where the CustomEvent is constructed.
+ */
+function emitChatOpen(roomId: string) {
+  if (typeof window === 'undefined') return
+
+  const detail: GlassChatOpenDetail = { roomId }
+
+  const event = new CustomEvent<GlassChatOpenDetail>(GLASS_EVENTS.CHAT_OPEN, {
+    detail,
+  })
+
+  window.dispatchEvent(event)
+}
+
+/**
+ * Click handler for friend item.
+ * For now we derive a mock roomId from friend.id.
+ * Later this will be replaced by real DbSession.id.
+ */
+function handleFriendClick(friend: FriendItem) {
+  const roomId = `mock-room-${friend.id}`
+  emitChatOpen(roomId)
 }
 </script>
 
 <template>
   <div class="friends-list">
-    <ul>
-      <li v-for="friend in friends" :key="friend.id" @click="openChat(friend.id)">
-        {{ friend.name }}
+    <ul class="friends-list__items">
+      <li v-for="friend in normalizedFriends" :key="friend.id" class="friends-list__item">
+        <button type="button" class="friends-list__button" @click="handleFriendClick(friend)">
+          <span class="friends-list__name">
+            {{ friend.displayName }}
+          </span>
+        </button>
       </li>
     </ul>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .friends-list {
-  padding: var(--spacing-md);
+  &__items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item + &__item {
+    margin-top: 0.25rem;
+  }
+
+  &__button {
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+  }
+
+  &__button:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  &__name {
+    font-size: 0.9rem;
+  }
 }
 </style>
