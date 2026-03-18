@@ -1,4 +1,5 @@
 import antfu from '@antfu/eslint-config'
+import eslintConfigPrettier from 'eslint-config-prettier/flat'
 import importX from 'eslint-plugin-import-x'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 
@@ -15,8 +16,8 @@ export default antfu(
       'import-x': importX,
     },
     rules: {
-      'perfectionist/sort-imports': 'off',     // ← отключаем сломанный
-      'perfectionist/sort-named-imports': 'off', // ← тоже off во избежание
+      'perfectionist/sort-imports': 'off',
+      'perfectionist/sort-named-imports': 'off',
       'simple-import-sort/imports': [
         'error',
         {
@@ -51,4 +52,5 @@ export default antfu(
       '**/*.md',
     ],
   },
+  eslintConfigPrettier,
 )
