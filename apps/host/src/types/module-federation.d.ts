@@ -1,4 +1,3 @@
-
 declare module 'friends/FriendsList'
 declare module 'chat/ChatWindow'
 declare module '*.vue' {

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 
+import AppShell from '~/components/AppShell.vue'
+
 // import { useRuntimeConfig } from '#app'
 
 const FriendsList = defineAsyncComponent(() => import('friends/FriendsList'))
@@ -15,10 +17,12 @@ const ChatWindow = defineAsyncComponent(() => import('chat/ChatWindow'))
 </script>
 
 <template>
-  <main class="layout">
-    <FriendsList />
-    <ChatWindow />
-  </main>
+  <AppShell>
+    <main class="layout">
+      <FriendsList />
+      <ChatWindow />
+    </main>
+  </AppShell>
 </template>
 
 <style scoped lang="scss">

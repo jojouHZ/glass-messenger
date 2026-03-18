@@ -3,25 +3,25 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "nuxt dev",
-    "prepare": "nuxt prepare",
-    "build": "nuxt prepare && nuxt build",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint ."
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.11.3",
-    "@upstash/redis": "^1.36.4",
-    "jose": "^6.2.1",
-    "nuxt": "^3.16.0",
-    "nuxt-security": "^2.5.1",
-    "vue": "^3.5.30",
     "pinia": "^3.0.4",
+    "vue": "^3.5.30",
     "vue-router": "^5.0.3"
   },
   "devDependencies": {
     "@module-federation/vite": "^1.12.3",
-    "@nuxt/devtools": "^3.2.3",
+    "@types/node": "^25.5.0",
+    "@vitejs/plugin-vue": "^5.2.3",
     "sass": "^1.98.0",
+    "typescript": "^5.8.2",
+    "unplugin-auto-import": "^19.1.2",
+    "unplugin-vue-router": "^0.10.9",
+    "vite": "^6.2.3",
     "vitest": "^4.0.18"
   }
 }

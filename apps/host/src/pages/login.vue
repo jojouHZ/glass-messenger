@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useRouter } from '#app'
+import { useRouter } from 'vue-router'
 
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '../stores/auth'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/
 

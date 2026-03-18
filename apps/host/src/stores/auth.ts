@@ -22,7 +22,6 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     hydrateFromStorage() {
-      if (!import.meta.client) return
       try {
         const raw = localStorage.getItem(STORAGE_KEY)
         if (raw) {
@@ -34,20 +33,13 @@ export const useAuthStore = defineStore('auth', {
     },
 
     loginMock(email: string) {
-      this.user = {
-        id: 'mock-user',
-        email,
-      }
-      if (import.meta.client) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.user))
-      }
+      this.user = { id: 'mock-user', email }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.user))
     },
 
     logout() {
       this.user = null
-      if (import.meta.client) {
-        localStorage.removeItem(STORAGE_KEY)
-      }
+      localStorage.removeItem(STORAGE_KEY)
     },
   },
 })

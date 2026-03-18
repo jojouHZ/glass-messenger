@@ -1,11 +1,8 @@
 {
   "tasks": {
-    "prepare": {
-      "outputs": [".nuxt/**"]
-    },
     "build": {
-      "dependsOn": ["prepare", "^build"],
-      "outputs": [".output/**", "dist/**"]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
     },
     "build:copy": {
       "dependsOn": ["build"],
@@ -13,8 +10,8 @@
       "outputs": []
     },
     "@glass/host#build": {
-      "dependsOn": ["@glass/friends#build:copy", "@glass/chat#build:copy", "prepare"],
-      "outputs": [".output/**"]
+      "dependsOn": ["@glass/friends#build:copy", "@glass/chat#build:copy"],
+      "outputs": ["dist/**"]
     },
     "dev": {
       "cache": false,

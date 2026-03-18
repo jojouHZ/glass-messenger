@@ -28,3 +28,24 @@ dist
 
 # MF remotes build artifacts (copied from apps/*/dist during build)
 apps/host/public/remotes/
+
+
+# Module Federation temp files
+**/.mftemp/
+**/__mf__temp/
+**/.__mf__temp/
+
+# Vite cache & build artifacts
+**/.vite/
+**/.vite-temp/
+**/dist/
+
+# Turbo cache
+.turbo/
+
+# Node modules
+**/node_modules/
+
+# Nuxt artifacts (legacy)
+**/.nuxt/
+**/.output/

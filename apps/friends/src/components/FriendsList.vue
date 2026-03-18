@@ -85,10 +85,7 @@ function handleFriendClick(friend: FriendItem) {
     background: transparent;
     padding: 0.5rem 0.75rem;
     cursor: pointer;
-  }
-
-  &__button:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+    color: #e2e8f0;
   }
 
   &__name {
