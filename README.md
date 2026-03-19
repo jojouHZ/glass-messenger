@@ -46,4 +46,4 @@ See [LICENSE](./LICENSE) for full terms.
 **Commercial licensing** for embedding glass in proprietary products or offering it
 as a managed service is available separately.
 
-© 2026 Roman Suleymanov
+© 2026 Roman Suleimanov
