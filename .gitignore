@@ -49,3 +49,6 @@ apps/host/public/remotes/
 # Nuxt artifacts (legacy)
 **/.nuxt/
 **/.output/
+
+# Nitro relay
+apps/relay/.nitro/

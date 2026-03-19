@@ -50,13 +50,20 @@ export function useChat(options: UseChatOptions): UseChatResult {
   }
 
   const handleMessage = (event: MessageEvent) => {
-    console.log('[chat] raw message from server', event.data)
+    console.log('[chat] raw message from server (type)', typeof event.data, event.data)
+
     try {
-      const parsed = JSON.parse(event.data as string) as WsEvent
+      const parsed = JSON.parse(String(event.data)) as WsEvent
       console.log('[chat] parsed WsEvent', parsed)
+
+      if (parsed.type === 'ack') {
+        console.log('[chat] received ack event', parsed.payload)
+        return
+      }
+
       onEvent?.(parsed)
     } catch (err) {
-      console.error('[chat] failed to parse message', err)
+      console.error('[chat] failed to parse message', err, 'raw=', event.data)
     }
   }
 
