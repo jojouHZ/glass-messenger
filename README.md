@@ -19,15 +19,17 @@ The server relays encrypted blobs — it is architecturally impossible to read m
 - [Turborepo](https://turbo.build/) + Yarn Berry — monorepo
 
 ## Monorepo Structure
-- apps/
-- host/ — shell, auth, routing
-- friends/ — contacts remote (MF)
-- chat/ — chat window remote (MF)
-- packages/
-- types/ — shared TypeScript interfaces
-- ui/ — shared design tokens and components
-- ws-client/ — Dexie schema, crypto, useChat composable
 
+```
+apps/
+  host/      — shell, auth, routing
+  friends/   — contacts remote (MF)
+  chat/      — chat window remote (MF)
+packages/
+  types/     — shared TypeScript interfaces
+  ui/        — shared design tokens and components
+  ws-client/ — Dexie schema, crypto, useChat composable
+```
 
 ## Security Model
 
