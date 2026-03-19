@@ -1,0 +1,16 @@
+glass-messenger
+Copyright (C) 2026 Roman Suleymanov
+
+This product includes software developed by Roman Suleymanov.
+
+System architecture, diagrams, documentation, and all source code
+in this repository are copyright Roman Suleymanov unless explicitly
+stated otherwise.
+
+Third-party dependencies are used under their respective licenses.
+See individual package.json files for details.
+
+The names "glass", "open-glass", "working-glass", and "shining-glass"
+are designations of Roman Suleymanov and may not be used to endorse
+or promote products derived from this software without prior written
+permission.
