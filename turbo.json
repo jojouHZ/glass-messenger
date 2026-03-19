@@ -1,8 +1,20 @@
 {
   "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": []
+    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["apps/*/dist/**", "apps/*/.output/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
     },
     "build:copy": {
       "dependsOn": ["build"],
@@ -11,14 +23,7 @@
     },
     "@glass/host#build": {
       "dependsOn": ["@glass/friends#build:copy", "@glass/chat#build:copy"],
-      "outputs": ["dist/**"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "lint": {
-      "dependsOn": ["^lint"]
+      "outputs": ["apps/host/dist/**"]
     }
   }
 }

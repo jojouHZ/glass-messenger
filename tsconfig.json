@@ -18,6 +18,6 @@
     },
     "types": ["vite/client", "unplugin-vue-router/client"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["apps/**/*", "packages/**/*", "eslint.config.mjs", "turbo.json"],
+  "exclude": ["node_modules", "dist", ".turbo"]
 }

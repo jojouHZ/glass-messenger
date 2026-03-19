@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
+    "dev:relay": "turbo run dev --filter=@glass/relay",
     "build": "turbo run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

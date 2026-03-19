@@ -1,0 +1,19 @@
+{
+  "name": "@glass/relay",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nitro dev --port 4000",
+    "build": "nitro build",
+    "start": "nitro start"
+  },
+  "dependencies": {
+    "h3": "^1.13.0",
+    "ufo": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.9",
+    "nitropack": "^2.9.7",
+    "typescript": "^5.8.2"
+  }
+}
