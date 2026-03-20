@@ -50,14 +50,8 @@ function leaveAllRooms(peer: Peer) {
 }
 
 export default defineWebSocketHandler({
-  open(peer: Peer) {
-    peer.send(
-      JSON.stringify({
-        type: 'ack',
-        roomId: '',
-        payload: { status: 'connected' },
-      }),
-    )
+  open(_peer: Peer) {
+    // no-op for Phase 2
   },
 
   message(peer: Peer, msg: { text?: () => string } | string) {
@@ -68,7 +62,6 @@ export default defineWebSocketHandler({
     try {
       event = JSON.parse(raw) as WsEvent
     } catch {
-      console.error('[ws] failed to parse incoming message', raw)
       return
     }
 
@@ -91,16 +84,26 @@ export default defineWebSocketHandler({
           client.send(raw)
         }
       }
+      peer.send(
+        JSON.stringify({
+          type: 'ack',
+          roomId: event.roomId,
+          payload: {
+            messageId: event.payload.messageId,
+            status: 'delivered',
+          },
+        }),
+      )
     }
 
-    // остальные типы пока игнорируем
+    // ignoring others for yet -> TODO PH3
   },
 
   close(peer: Peer) {
     leaveAllRooms(peer)
   },
 
-  error(peer: Peer, error: unknown) {
-    console.error('[ws] error', peer.id, error)
+  error(_peer: Peer, _error: unknown) {
+    // TODO PH3
   },
 })

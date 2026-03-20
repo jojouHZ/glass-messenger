@@ -1,4 +1,5 @@
-/* eslint-disable no-console */
+import { db } from './db'
+
 import type { WsEvent } from '@glass/types'
 export type { WsEvent } from '@glass/types'
 
@@ -21,10 +22,71 @@ export interface UseChatResult {
 
 const pendingEvents: WsEvent[] = []
 
+function createMessageId(conversationId: string): string {
+  return `${conversationId}::${Date.now()}::${crypto.randomUUID()}`
+}
+
+async function persistOutgoingMessage(params: {
+  conversationId: string
+  senderId: string
+  text: string
+}): Promise<WsEvent> {
+  const { conversationId, senderId, text } = params
+  const now = Date.now()
+  const messageId = createMessageId(conversationId)
+
+  const event: WsEvent = {
+    type: 'message',
+    roomId: conversationId,
+    payload: {
+      messageId,
+      senderId,
+      storedPayload: text,
+      iv: '',
+    },
+  }
+
+  await db.transaction('rw', db.messages, db.outbox, async () => {
+    await db.messages.put({
+      id: messageId,
+      conversationId,
+      senderId,
+      type: 'text',
+      cipherText: text,
+      sentAt: now,
+      status: 'pending',
+    })
+
+    await db.outbox.put({
+      id: messageId,
+      messageId,
+      conversationId,
+      payload: text,
+      createdAt: now,
+    })
+  })
+
+  return event
+}
+
+async function markMessageDelivered(messageId: string): Promise<void> {
+  await db.transaction('rw', db.messages, db.outbox, async () => {
+    const message = await db.messages.get(messageId)
+    if (message) {
+      message.status = 'delivered'
+      message.receivedAt = Date.now()
+      await db.messages.put(message)
+    }
+
+    await db.outbox.delete(messageId)
+  })
+}
+
 /**
  * Minimal WS client for Phase 2:
  * - single WS connection per instance
- * - no reconnection, no Dexie, no crypto
+ * - no reconnection, no crypto
+ * - Dexie WAL for outgoing messages
  */
 export function useChat(options: UseChatOptions): UseChatResult {
   const { wsUrl, userId, onEvent } = options
@@ -34,36 +96,41 @@ export function useChat(options: UseChatOptions): UseChatResult {
 
   const safeSend = (event: WsEvent) => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
-      console.warn('[chat] queue event until socket open', event.type)
       pendingEvents.push(event)
+
       return
     }
+
     socket.send(JSON.stringify(event))
   }
 
   const handleOpen = () => {
     connected = true
-    console.log('[chat] socket open', wsUrl)
+
     for (const ev of pendingEvents.splice(0)) {
       socket?.send(JSON.stringify(ev))
     }
   }
 
-  const handleMessage = (event: MessageEvent) => {
-    console.log('[chat] raw message from server (type)', typeof event.data, event.data)
-
+  const handleMessage = async (event: MessageEvent) => {
     try {
       const parsed = JSON.parse(String(event.data)) as WsEvent
-      console.log('[chat] parsed WsEvent', parsed)
 
       if (parsed.type === 'ack') {
-        console.log('[chat] received ack event', parsed.payload)
+        const payload = parsed.payload as { messageId?: string; status?: string }
+
+        if (!payload.messageId) {
+          return
+        }
+
+        await markMessageDelivered(payload.messageId)
         return
       }
 
       onEvent?.(parsed)
-    } catch (err) {
-      console.error('[chat] failed to parse message', err, 'raw=', event.data)
+      // eslint-disable-next-line unused-imports/no-unused-vars
+    } catch (_err) {
+      // TODO PH3
     }
   }
 
@@ -85,7 +152,6 @@ export function useChat(options: UseChatOptions): UseChatResult {
     }
 
     socket = new WebSocket(wsUrl)
-
     socket.addEventListener('open', handleOpen)
     socket.addEventListener('message', handleMessage)
     socket.addEventListener('close', handleClose)
@@ -94,6 +160,7 @@ export function useChat(options: UseChatOptions): UseChatResult {
 
   const disconnect = () => {
     if (!socket) return
+
     socket.removeEventListener('open', handleOpen)
     socket.removeEventListener('message', handleMessage)
     socket.removeEventListener('close', handleClose)
@@ -105,7 +172,6 @@ export function useChat(options: UseChatOptions): UseChatResult {
 
   const joinRoom = (roomId: string) => {
     if (!socket || socket.readyState === WebSocket.CLOSED) {
-      console.log('[chat] joinRoom: no socket or closed, calling connect()')
       connect()
     }
 
@@ -114,7 +180,7 @@ export function useChat(options: UseChatOptions): UseChatResult {
       roomId,
       payload: { userId, roomId },
     }
-    console.log('[chat] joinRoom: sending', event)
+
     safeSend(event)
   }
 
@@ -122,25 +188,23 @@ export function useChat(options: UseChatOptions): UseChatResult {
     if (!socket || socket.readyState === WebSocket.CLOSED) {
       connect()
     }
+
     const event: WsEvent = {
       type: 'leave',
       roomId,
       payload: { userId, roomId },
     }
+
     safeSend(event)
   }
 
-  const sendMessage = (roomId: string, text: string) => {
-    const event: WsEvent = {
-      type: 'message',
-      roomId,
-      payload: {
-        messageId: crypto.randomUUID(),
-        senderId: userId,
-        storedPayload: text, // Phase 2: plaintext, Phase 4: AES-GCM
-        iv: '', // Phase 2: пусто, Phase 4: реальный IV
-      },
-    }
+  const sendMessage = async (roomId: string, text: string) => {
+    const event = await persistOutgoingMessage({
+      conversationId: roomId,
+      senderId: userId,
+      text,
+    })
+
     safeSend(event)
   }
 
