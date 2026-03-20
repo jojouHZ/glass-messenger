@@ -49,7 +49,7 @@ const onSubmit = (): void => {
         </span>
       </label>
 
-      <button type="submit" :disabled="!isSubmittable">Sign in (mock)</button>
+      <button type="submit" :disabled="!isSubmittable">Sign in</button>
     </form>
   </main>
 </template>

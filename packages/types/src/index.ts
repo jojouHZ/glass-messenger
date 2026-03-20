@@ -7,11 +7,22 @@ export interface User {
   createdAt: number
 }
 
+// ─── Participant ──────────────────────────────────────────────────────────────
+
+export type ParticipantRole = 'owner' | 'member' | 'bot'
+
+export interface Participant {
+  userId: string
+  role: ParticipantRole
+  joinedAt: number
+  leftAt?: number // set on soft-delete / leave
+}
+
 // ─── Room ────────────────────────────────────────────────────────────────────
 
 export interface Room {
   id: string
-  participantIds: string[]
+  participants: Participant[]
   createdAt: number
   lastMessageAt?: number
 }
@@ -86,12 +97,14 @@ export type WsEvent =
 
 export type WsEventType = WsEvent['type']
 
-// MF Event Bus — shared constants & types
+// ─── MF Event Bus ─────────────────────────────────────────────────────────────
+
 export const GLASS_EVENTS = {
   CHAT_OPEN: 'glass:chat-open',
   AUTH_READY: 'glass:auth-ready',
-  // TODO: AUTH_CHANGED, INVITE_RECEIVED, FORCE_WIPE…
 } as const
+
+export type GlassEventName = (typeof GLASS_EVENTS)[keyof typeof GLASS_EVENTS]
 
 export interface GlassChatOpenDetail {
   roomId: string
@@ -102,5 +115,5 @@ export interface GlassAuthReadyDetail {
   displayName?: string
 }
 
-// Helper: typed wrapper to avoid casting at call sites
 export type GlassChatOpenEvent = CustomEvent<GlassChatOpenDetail>
+export type GlassAuthReadyEvent = CustomEvent<GlassAuthReadyDetail>
