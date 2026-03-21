@@ -13,13 +13,15 @@ const app = createApp(App)
 const pinia = createPinia()
 app.use(pinia)
 
+const auth = useAuthStore(pinia)
+auth.hydrateFromStorage() // restore user + dispatch AUTH_READY on cold start
+
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
 
 router.beforeEach((to) => {
-  const auth = useAuthStore(pinia) // передаём pinia явно
   if (to.path !== '/login' && !auth.isAuthenticated) {
     return '/login'
   }

@@ -108,6 +108,7 @@ export type GlassEventName = (typeof GLASS_EVENTS)[keyof typeof GLASS_EVENTS]
 
 export interface GlassChatOpenDetail {
   roomId: string
+  peerId: string
 }
 
 export interface GlassAuthReadyDetail {

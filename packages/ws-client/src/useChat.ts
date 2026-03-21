@@ -14,7 +14,7 @@ export interface UseChatOptions {
 export interface UseChatResult {
   connect: () => void
   disconnect: () => void
-  joinRoom: (roomId: string) => void
+  joinRoom: (roomId: string, peerId?: string) => void
   leaveRoom: (roomId: string) => void
   sendMessage: (roomId: string, text: string) => void
   isConnected: () => boolean
@@ -79,6 +79,20 @@ async function markMessageDelivered(messageId: string): Promise<void> {
     }
 
     await db.outbox.delete(messageId)
+  })
+}
+
+async function upsertSession(roomId: string, selfId: string, peerId: string): Promise<void> {
+  const existing = await db.sessions.get(roomId)
+  if (existing && existing.selfId === selfId) return // skip only if same user
+
+  const now = Date.now()
+  await db.sessions.put({
+    id: roomId,
+    selfId,
+    peerId,
+    createdAt: existing?.createdAt ?? now,
+    updatedAt: now,
   })
 }
 
@@ -170,7 +184,7 @@ export function useChat(options: UseChatOptions): UseChatResult {
     connected = false
   }
 
-  const joinRoom = (roomId: string) => {
+  const joinRoom = (roomId: string, peerId?: string) => {
     if (!socket || socket.readyState === WebSocket.CLOSED) {
       connect()
     }
@@ -182,6 +196,10 @@ export function useChat(options: UseChatOptions): UseChatResult {
     }
 
     safeSend(event)
+
+    if (peerId) {
+      upsertSession(roomId, userId, peerId).catch(() => {})
+    }
   }
 
   const leaveRoom = (roomId: string) => {

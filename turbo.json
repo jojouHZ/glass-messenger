@@ -7,7 +7,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["apps/*/dist/**", "apps/*/.output/**"]
+      "outputs": ["dist/**", ".output/**"]
     },
     "lint": {
       "dependsOn": ["^lint"],
@@ -23,7 +23,7 @@
     },
     "@glass/host#build": {
       "dependsOn": ["@glass/friends#build:copy", "@glass/chat#build:copy"],
-      "outputs": ["apps/host/dist/**"]
+      "outputs": ["dist/**"]
     }
   }
 }

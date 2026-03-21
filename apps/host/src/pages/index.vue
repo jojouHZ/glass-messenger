@@ -19,8 +19,12 @@ const ChatWindow = defineAsyncComponent(() => import('chat/ChatWindow'))
 <template>
   <AppShell>
     <main class="layout">
-      <FriendsList />
-      <ChatWindow />
+      <div class="layout__sidebar">
+        <FriendsList />
+      </div>
+      <div class="layout__main">
+        <ChatWindow />
+      </div>
     </main>
   </AppShell>
 </template>
@@ -29,33 +33,42 @@ const ChatWindow = defineAsyncComponent(() => import('chat/ChatWindow'))
 .layout {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr);
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
 
   &__sidebar {
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     overflow-y: auto;
+    min-height: 0;
   }
 
   &__main {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
     overflow: hidden;
-  }
 
-  &__loading {
-    padding: 1rem;
-    font-size: 0.9rem;
-    opacity: 0.7;
+    > * {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
   }
 }
 
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
   }
 
   .layout__sidebar {
     max-height: 260px;
+  }
+
+  .layout__main {
+    min-height: 0;
   }
 }
 </style>
